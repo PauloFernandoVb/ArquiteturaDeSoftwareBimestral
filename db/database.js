@@ -4,42 +4,49 @@ class Database {
 
     #conexao;
 
-    get conexao() { return this.#conexao;} 
+    get conexao() { return this.#conexao; }
     set conexao(conexao) { this.#conexao = conexao; }
 
     constructor() {
-
+        //novo
+        if (Database.#instance) {
+            throw new Error("Use Database.getInstance() para obter a instância do banco de dados.");
+        }
         this.#conexao = mysql.createPool({
-            host: '132.226.245.178', //endereço do nosso banco de dados na nuvem
-            database: 'ATIVIDADE_10442427754', //a database de cada um de vocês possui a nomenclatura PFS1_(RA)
-            user: '10442427754', // usuario e senha de cada um de vocês é o RA
+            host: '132.226.245.178', 
+            database: 'ATIVIDADE_10442427754', 
+            user: '10442427754', 
             password: '10442427754',
             waitForConnections: true,
-            connectionLimit: 100, // Limite de conexões
-            queueLimit: 0 // Sem limite na fila de conexões
-        });
-        
+            connectionLimit: 50, 
+            queueLimit: 0 
+        });    }
+    ///novo
+    static getInstance() {
+        if (!Database.#instance) { Database.#instance = new Database(); }
+        return Database.#instance;
     }
+
 
     ExecutaComando(sql, valores) {
         var cnn = this.#conexao;
-        return new Promise(function(res, rej) {
+        return new Promise(function (res, rej) {
             cnn.query(sql, valores, function (error, results, fields) {
-                if (error) 
+                if (error)
                     rej(error);
-                else 
+                else
                     res(results);
             });
         })
     }
-    
+
     ExecutaComandoNonQuery(sql, valores) {
         var cnn = this.#conexao;
-        return new Promise(function(res, rej) {
+        return new Promise(function (res, rej) {
             cnn.query(sql, valores, function (error, results, fields) {
-                if (error) 
+                if (error)
                     rej(error);
-                else 
+                else
                     res(results.affectedRows > 0);
             });
         })
@@ -47,11 +54,11 @@ class Database {
 
     ExecutaComandoLastInserted(sql, valores) {
         var cnn = this.#conexao;
-        return new Promise(function(res, rej) {
+        return new Promise(function (res, rej) {
             cnn.query(sql, valores, function (error, results, fields) {
-                if (error) 
+                if (error)
                     rej(error);
-                else 
+                else
                     res(results.insertId);
             });
         })
