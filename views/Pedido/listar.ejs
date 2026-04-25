@@ -1,0 +1,35 @@
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="/js/pedido/listar.js"></script>
+
+<div>
+    <h1>Pedidos</h1>
+    <div>
+        <div class="form-group">
+            <label>Busca (Nome do Produto ou Nro. Pedido)</label>
+            <input id="inputBusca" class="form-control" />
+        </div>
+        <div>
+            <button id="buscar" class="btn btn-primary"><i class="fas fa-search"> Buscar</i></button>
+            <button class="btn btn-success" id="excel"><i class="fas fa-file"></i> Exportar para Excel</button>
+            <button onclick="window.print()" class="btn btn-success" id="pdf"><i class="fas fa-file"></i> Exportar para PDF</button>
+        </div>
+    </div>
+    <br>
+    <div class="table-responsive">
+        <table id="pedidos" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nro. Pedido</th>                   
+                    <th>Data do Pedido</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Unitário</th>
+                    <th>Valor do Pedido</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
