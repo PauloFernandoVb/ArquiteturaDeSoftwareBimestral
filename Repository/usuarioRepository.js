@@ -1,6 +1,6 @@
 
-const UsuarioModel = require("../models/usuarioModel.js");
-const Repository = require("./Repository.js");
+const UsuarioModel = require("../models/usuarioModel");
+const Repository = require("./Repository");
 
 class UsuarioRepository extends Repository {
 
@@ -13,7 +13,7 @@ class UsuarioRepository extends Repository {
 
         let valores = [email, senha];
 
-        let rows = await banco.ExecutaComando(sql, valores);
+        let rows = await this.banco.ExecutaComando(sql, valores);
 
         if (rows.length > 0) {
             let row = rows[0];
@@ -27,7 +27,7 @@ class UsuarioRepository extends Repository {
 
         let sql = "select * from tb_usuario";
 
-        let rows = await banco.ExecutaComando(sql);
+        let rows = await this.banco.ExecutaComando(sql);
         let lista = [];
 
         for (let i = 0; i < rows.length; i++) {
@@ -42,7 +42,7 @@ class UsuarioRepository extends Repository {
 
             let valores = [this.#usuarioEmail, this.#usuarioNome, this.#usuarioSenha, this.#usuarioAtivo, this.#perfilId];
 
-            let result = await banco.ExecutaComandoNonQuery(sql, valores);
+            let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
 
             return result;
         }
@@ -51,7 +51,7 @@ class UsuarioRepository extends Repository {
 
             let valores = [this.#usuarioEmail, this.#usuarioNome, this.#usuarioSenha, this.#usuarioAtivo, this.#perfilId, this.#usuarioId];
 
-            let result = await banco.ExecutaComandoNonQuery(sql, valores);
+            let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
             return result;
         }
     }
@@ -61,7 +61,7 @@ class UsuarioRepository extends Repository {
 
         let valores = [id];
 
-        let rows = await banco.ExecutaComando(sql, valores);
+        let rows = await this.banco.ExecutaComando(sql, valores);
 
         if (rows.length > 0) {
             let row = rows[0];
@@ -76,7 +76,7 @@ class UsuarioRepository extends Repository {
 
         let valores = [id];
 
-        let result = await banco.ExecutaComandoNonQuery(sql, valores);
+        let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
 
         return result;
     }

@@ -28,24 +28,8 @@ class PerfilModel {
         this.#perfilDescricao = perfilDescricao;
     }
 
-    async listar() {
-
-        let sql = "select * from tb_perfil";
-
-        let rows = await banco.ExecutaComando(sql);
-
-        let lista = [];
-
-        for(let i = 0; i<rows.length; i++) {
-            let perfil = new PerfilModel()
-
-            perfil.perfilId = rows[i]["per_id"];
-            perfil.perfilDescricao = rows[i]["per_nome"]
-
-            lista.push(perfil);
-        }
-
-        return lista;
+    static toMap(row) {
+        let perfil = new PerfilModel(row["per_id"], row["per_nome"])
     }
 
 }

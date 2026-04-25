@@ -1,7 +1,7 @@
 
 //classe para deixar uma unica instancia de banco
 
-const Banco = require("../db/database.js");
+const Banco = require("../db/database");
 
 class Repository {
     #banco;

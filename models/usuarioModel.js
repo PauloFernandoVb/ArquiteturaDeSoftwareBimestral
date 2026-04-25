@@ -1,6 +1,7 @@
-const Database = require("../db/database");
+// const Database = require("../db/database.js");
+const PerfilModel = require("../models/perfilModel");
 
-const banco = new Database();
+// const banco = new Database();
 //==============================================
 //AQUI NAO VAI MAIS INSTANCIAR COM O BANCO, VAI INSTANCIAR COM O REPOSITORY
 
@@ -44,7 +45,7 @@ class UsuarioModel {
         return this.#perfilId;
     }
 
-    set perfilId(perfilId){
+    set perfilId(perfilId) {
         this.#perfilId = perfilId;
     }
 
@@ -63,6 +64,10 @@ class UsuarioModel {
         this.#usuarioSenha = usuarioSenha;
         this.#usuarioAtivo = usuarioAtivo;
         this.#perfilId = perfilId;
+    }
+
+    static toMap(row) {
+        let usuario = new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new PerfilModel(row["per_id"]))
     }
 
 }
