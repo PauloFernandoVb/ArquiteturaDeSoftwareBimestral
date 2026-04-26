@@ -15,9 +15,8 @@ class UsuarioRepository extends Repository {
 
         let rows = await this.banco.ExecutaComando(sql, valores);
 
-        if (rows.length > 0) {
-            let row = rows[0];
-            return new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], row["per_id"]);
+        if (rows.length > 0) {            
+            return UsuarioModel.toMap(rows[0]);
         }
 
         return null;
@@ -31,16 +30,16 @@ class UsuarioRepository extends Repository {
         let lista = [];
 
         for (let i = 0; i < rows.length; i++) {
-            lista.push(new UsuarioModel(rows[i]["usu_id"], rows[i]["usu_nome"], rows[i]["usu_email"], rows[i]["usu_senha"], rows[i]["usu_ativo"], rows[i]["per_id"]));
+            lista.push(UsuarioModel.toMap(rows[i]));
         }
         return lista;
     }
 
-    async cadastrar() {
-        if (this.#usuarioId == 0) {
+    async cadastrar(usuario) {
+        if (usuario.id == 0) {
             let sql = "insert into tb_usuario (usu_email, usu_nome, usu_senha, usu_ativo, per_id) values (?,?,?,?,?)";
 
-            let valores = [this.#usuarioEmail, this.#usuarioNome, this.#usuarioSenha, this.#usuarioAtivo, this.#perfilId];
+            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfilId];
 
             let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
 
@@ -49,7 +48,7 @@ class UsuarioRepository extends Repository {
         else {
             let sql = "update tb_usuario set usu_email = ?, usu_nome = ?, usu_senha = ?, usu_ativo = ?, per_id = ? where usu_id = ?";
 
-            let valores = [this.#usuarioEmail, this.#usuarioNome, this.#usuarioSenha, this.#usuarioAtivo, this.#perfilId, this.#usuarioId];
+            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfilId, usuario.id];
 
             let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
             return result;
@@ -64,21 +63,16 @@ class UsuarioRepository extends Repository {
         let rows = await this.banco.ExecutaComando(sql, valores);
 
         if (rows.length > 0) {
-            let row = rows[0];
-            return new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], row["per_id"]);
+            return UsuarioModel.toMap(rows[0]);
         }
-
         return null;
     }
 
     async excluir(id) {
         let sql = "delete from tb_usuario where usu_id = ?";
-
         let valores = [id];
 
-        let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
-
-        return result;
+        return await this.banco.ExecutaComandoNonQuery(sql, valores);
     }
 
 }

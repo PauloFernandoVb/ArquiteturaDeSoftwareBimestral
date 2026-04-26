@@ -1,134 +1,108 @@
-const PerfilModel = require("../models/perfilModel");
 const PerfilRepository = require("../Repository/perfilRepository")
 const UsuarioModel = require("../models/usuarioModel");
-const UsuarioRepository = require("../Repository/usuarioRepository")
 
 class UsuarioController {
 
-    #Usuario;
-    #Perfil;
+    static #instance;
+
+    static getInstance() {
+        if (!UsuarioController.#instance) {
+            UsuarioController.#instance = new UsuarioController();
+        }
+        return UsuarioController.#instance;
+    }
+    //fecha so para pegar uma instancia
 
 
     constructor() {
-        this.#Usuario = new UsuarioRepository();
-        this.#Perfil = new PerfilRepository();
-
+        this.perfilRepo = new PerfilRepository();
     }
 
+    //finalizar aqui as funçoes
+    async listagemView(req, res) {
+        let usuario = new UsuarioModel();
+        let listaUsuarios = await usuario.listar()
 
-    async listagemView(req, resp) {
-        let entidades = await this.#Usuario.listar();
-        // let usuario = new UsuarioModel();
-        // let listaUsuarios = await usuario.listar()
-
-        resp.render("usuarios/listagem", { lista: entidades });
-        // resp.render("usuarios/listagem", { lista: listaUsuarios });
+        res.render("usuarios/listagem", { lista: listaUsuarios });
     }
 
-    async cadastroView(req, resp) {
-        let entidades = await this.#Perfil.listar();
-        // let perfil = new PerfilModel();
-        // let listaPerfil = await perfil.listar();
-        resp.render("usuarios/cadastro", { listaPerfil: entidades });
+    async cadastroView(req, res) {
+        let listaPerfil = await this.#perfilRepo.listar();
+        res.render("usuarios/cadastro", { listaPerfil });
     }
 
-    async cadastrar(req, resp) {
-        let msg = "";
-        let cor = "";
-        if (req.body.email != "" && req.body.senha != "" && req.body.nome != "" &&
-            req.body.perfil != '0') {
-            let usuario = new UsuarioModel(0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, req.body.perfil);
+    async cadastrar(req, res) {
 
-            let result = await this.#Usuario.cadastrar();
+        let usuario = new UsuarioModel(
+            0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, req.body.perfil
+        );
+
+        if (usuario.validar()) {
+            let result = await usuario.cadastrar();
 
             if (result) {
-                resp.send({
-                    ok: true,
-                    msg: "Usuário cadastrado com sucesso!"
-                });
+                res.send({ ok: true, msg: "Cadastrado com sucesso!" })
+            } else {
+                res.send({ ok: false, msg: "Erro ao cadastrar!" });
             }
-            else {
-                resp.send({
-                    ok: false,
-                    msg: "Erro ao cadastrar usuário!"
-                });
-            }
-        }
-        else {
-            resp.send({
-                ok: false,
-                msg: "Parâmetros preenchidos incorretamente!"
-            });
-        }
-
-    }
-
-    async alterarView(req, res) {
-        console.log(req.params);
-
-        // let perfil = new PerfilModel();
-
-        let listaPerfil = await this.#Perfil.listar();
-
-        // let usuario = new UsuarioModel();
-
-        usuario = await this.#Usuario.obter(req.params.id);
-
-        res.render('usuarios/alterar', { usuario: usuario, listaPerfil: listaPerfil });
-    }
-
-    async excluir(req, res) {
-        if (req.body.id != null) {
-            // let usuario = new UsuarioModel();
-            let ok = await this.#Usuario.excluir(req.body.id);
-            if (ok) {
-                res.send({ ok: true });
-            }
-            else {
-                res.send({ ok: false, msg: "Erro ao excluir usuário" })
-            }
-        }
-        else {
-            res.send({ ok: false, msg: "O id para exclusão não foi enviado" })
-        }
-    }
-
-    async alterar(req, res) {
-        let msg = "";
-        let cor = "";
-        if (req.body.id > 0 && req.body.email != "" && req.body.senha != "" && req.body.nome != "" &&
-            req.body.perfil != '0') {
-
-
-            ///===================================================
-            //FIQUEI COM DUVIDA AQUI PQ NO FULLSTACK 2 USA DESSE JEIT SEM O REQ
-            //let { nome, email, ativo, senha, perfil } = req.body;
-            // let entidade = new UsuarioEntity(0, nome, email, ativo, senha, new PerfilEntity(perfil.id));
-            ///===================================================
-            let usuario = new UsuarioModel(req.body.id, req.body.nome, req.body.email, req.body.senha, req.body.ativo, req.body.perfil);
-
-            let result = await this.#Usuario.cadastrar();
-
-            if (result) {
-                res.send({
-                    ok: true,
-                    msg: "Usuário alterado com sucesso!"
-                });
-            }
-            else {
-                res.send({
-                    ok: false,
-                    msg: "Erro ao alterar usuário!"
-                });
-            }
-        }
-        else {
+        } else {
             res.send({
                 ok: false,
                 msg: "Parâmetros preenchidos incorretamente!"
             });
+
+        }
+
+    }
+    async alterarView(req, res) {
+        console.log(req.params);
+
+        let usuario = new UsuarioModel();
+        let entidade = await usuario.obter(req.params.id);
+        let listaPerfil = await this.perfilRepo.listar();
+
+        res.render('usuarios/alterar', { usuario: entidade, listaPerfil });
+    }
+
+    async excluir(req, res) {
+        if (req.body.id) {
+
+            let usuario = new UsuarioModel();
+            let result = await usuario.excluir(req.body.id);
+
+            if (result) {
+                res.send({ ok: true, msg: "Excluido com sucesso" });
+            }
+            else {
+                res.send({ ok: false, msg: "Erro ao excluir" });
+            }
+
+        } else {
+            res.send({ ok: false, msg: "ID não enviado" });
         }
     }
+
+    async alterar(req, res) {
+
+        let usuario = new UsuarioModel(
+            req.body.id, req.body.nome, req.body.email, req.body.senha,
+            req.body.ativo, req.body.perfil);
+
+        if (usuario.validar()) {
+
+            let result = await usuario.cadastrar();
+
+            if (result) {
+                res.send({ ok: true, msg: "Alterado com sucesso" });
+            }
+            else {
+                res.send({ ok: false, msg: "Erro ao alterar" });
+            }
+        } else {
+            res.send({ ok: false, msg: "Dados inválidos" });
+        }
+    }
+
 }
 
 module.exports = UsuarioController;
