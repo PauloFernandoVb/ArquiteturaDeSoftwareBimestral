@@ -29,8 +29,9 @@ class UsuarioRepository extends Repository {
         let rows = await this.banco.ExecutaComando(sql);
         let lista = [];
 
-        for (let i = 0; i < rows.length; i++) {
-            lista.push(UsuarioModel.toMap(rows[i]));
+        for (let row of rows) {
+            console.log(UsuarioModel)
+            lista.push(UsuarioModel.toMap(row));
         }
         return lista;
     }

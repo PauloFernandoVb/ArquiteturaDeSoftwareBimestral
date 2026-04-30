@@ -2,15 +2,16 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const homeRoute = require('./routes/homeRoute');
-const produtoRoute = require('./routes/produtoRoute');
-const marcaRoute = require('./routes/marcaRoute');
-const categoriaRoute = require('./routes/categoriaRoute');
+// const produtoRoute = require('./routes/produtoRoute');
+// const marcaRoute = require('./routes/marcaRoute');
+// const categoriaRoute = require('./routes/categoriaRoute');
+const loginRoute = require("./routes/loginRoute");
 const usuarioRoute = require("./routes/usuarioRoute");
 const perfilRoute = require('./routes/perfilRoute');
-const loginRoute = require("./routes/loginRoute");
-const pedidoRoute = require("./routes/pedidosRoute");
+// const pedidoRoute = require("./routes/pedidosRoute");
 const cookieParser = require("cookie-parser");
-const AuthMiddleware = require('./middlewares/authMiddleware');
+
+// const AuthMiddleware = require('./middlewares/authMiddleware');
 const app = express();
 //configurando a nossa pasta public como o nosso repositorio de arquivos estáticos (css, js, imagens)
 app.use(express.static(__dirname + "/public"))
@@ -30,15 +31,15 @@ app.use(cookieParser());
 //definindo as rotas que o nosso sistema vai reconhecer através da url do navegador
 app.use("/login", loginRoute);
 app.use('/', homeRoute);
-app.use('/produto', produtoRoute);
-app.use("/pedido", pedidoRoute);
-let auth = new AuthMiddleware();
+// app.use('/produto', produtoRoute);
+// app.use("/pedido", pedidoRoute);
+// let auth = new AuthMiddleware();
 
-app.use(auth.verificarUsuarioLogado);
+// app.use(auth.verificarUsuarioLogado);
 
 
-app.use("/marcas", marcaRoute);
-app.use("/categorias", categoriaRoute);
+// app.use("/marcas", marcaRoute);
+// app.use("/categorias", categoriaRoute);
 app.use("/usuarios", usuarioRoute);
 app.use("/perfis", perfilRoute);
 
@@ -47,5 +48,5 @@ global.CAMINHO_IMG_ABS = __dirname + "/public/img/produtos/";
 
 //ponto de inicio do nosso servidor web
 const server = app.listen('5000', function() {
-    console.log('Servidor web iniciado');
+    console.log('Servidor web iniciado na porta 5000');
 });

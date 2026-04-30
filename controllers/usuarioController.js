@@ -4,6 +4,7 @@ const UsuarioModel = require("../models/usuarioModel");
 class UsuarioController {
 
     static #instance;
+    #perfilRepo;
 
     static getInstance() {
         if (!UsuarioController.#instance) {

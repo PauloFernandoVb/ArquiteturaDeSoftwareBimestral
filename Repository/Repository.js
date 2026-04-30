@@ -15,7 +15,7 @@ class Repository {
     }
 
     constructor() {
-        this.#banco = new Banco.getInstance();
+        this.#banco = Banco.getInstance();
     }
 
 }

@@ -5,11 +5,6 @@ class PerfilModel {
     #perfilId;
     #perfilDescricao;
 
-    constructor(id, descricao) {
-        this.#perfilId = id;
-        this.#perfilDescricao = descricao;
-    }
-
     get perfilId() { return this.#perfilId }
     set perfilId(perfilId) { this.#perfilId = perfilId }
     get perfilDescricao() { return this.#perfilDescricao }

@@ -2,12 +2,13 @@ var mysql = require('mysql2');
 
 class Database {
 
+    static #instance;
     #conexao;
-
     get conexao() { return this.#conexao; }
     set conexao(conexao) { this.#conexao = conexao; }
 
     constructor() {
+        console.log('constutor chamado')
         //novo
         if (Database.#instance) {
             throw new Error("Use Database.getInstance() para obter a instância do banco de dados.");

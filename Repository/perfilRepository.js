@@ -1,6 +1,6 @@
 
 
-const Database = require("../database/database");
+const Database = require("../db/database");
 const PerfilModel = require("../models/perfilModel");
 
 class PerfilRepository {
