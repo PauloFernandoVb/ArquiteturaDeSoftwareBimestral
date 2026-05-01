@@ -15,6 +15,19 @@
                 <th>Ações</th>
             </thead>
             <tbody>
+                <% lista.forEach(u => { %>
+                    <tr>
+                        <td><%= u.usuarioId %></td>
+                        <td><%= u.usuarioEmail %></td>
+                        <td><%= u.usuarioNome %></td>
+                        <td><%= u.perfilId.perfilId %></td>
+                        <td><%= u.usuarioAtivo %></td>
+                        <td>
+                            <a href="/usuarios/alterar/<%= u.usuarioId %>" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                            <button data-codigoexclusao="<%= u.usuarioId %>" class="btn btn-danger btnExclusao"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                <% }) %>
                 <% for (let i = 0; i < lista.length; i++)  { %>
                     <tr>
                         <td><%= lista[i].usuarioId %></td>

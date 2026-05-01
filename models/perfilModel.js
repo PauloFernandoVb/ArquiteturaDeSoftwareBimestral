@@ -22,6 +22,13 @@ class PerfilModel {
         const repo = new PerfilRepository();
         return await repo.listar();
     }
+    
+    toJSON(){
+        return {
+            perfilId: this.#perfilId,
+            perfilDescricao: this.#perfilDescricao
+        }
+    }
 }
 
 module.exports = PerfilModel;

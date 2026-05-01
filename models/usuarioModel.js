@@ -48,6 +48,18 @@ class UsuarioModel {
         return await repo.listar();
     }
 
+        async listar2() {
+        const repo = new UsuarioRepository();
+        let lista = [];
+        let rows =  await repo.listar2();
+       
+        for (let row of rows) {
+            //console.log(UsuarioModel)
+            lista.push(UsuarioModel.toMap(row));
+        }
+        return lista
+    }
+
     async excluir(id) {
         const repo = new UsuarioRepository();
         return await repo.excluir(id);
@@ -61,6 +73,19 @@ class UsuarioModel {
     }
     static toMap(row) {
         return new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new PerfilModel(row["per_id"]));
+    }
+    toJSON(){
+        return {
+        usuarioId: this.#usuarioId,
+        usuarioNome: this.#usuarioNome,
+        usuarioEmail: this.#usuarioEmail,
+        usuarioSenha: this.#usuarioSenha,
+        usuarioAtivo: this.#usuarioAtivo,
+        perfilId: {
+            perfilId: this.#perfilId.perfilId,
+            perfilDescricao: this.#perfilId.perfilDescricao
+        }
+        }
     }
 
 }

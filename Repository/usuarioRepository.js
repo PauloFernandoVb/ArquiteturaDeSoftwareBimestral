@@ -1,5 +1,5 @@
 
-const UsuarioModel = require("../models/usuarioModel");
+const PerfilModel = require("../models/perfilModel");
 const Repository = require("./Repository");
 
 class UsuarioRepository extends Repository {
@@ -30,10 +30,19 @@ class UsuarioRepository extends Repository {
         let lista = [];
 
         for (let row of rows) {
-            console.log(UsuarioModel)
             lista.push(UsuarioModel.toMap(row));
+            //lista.push(new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new //PerfilModel(row["per_id"])));
         }
         return lista;
+    }
+
+        async listar2() {
+
+        let sql = "select * from tb_usuario";
+
+        let rows = await this.banco.ExecutaComando(sql);
+
+        return rows;
     }
 
     async cadastrar(usuario) {

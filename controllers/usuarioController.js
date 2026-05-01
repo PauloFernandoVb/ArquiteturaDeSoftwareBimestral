@@ -22,9 +22,9 @@ class UsuarioController {
     //finalizar aqui as funçoes
     async listagemView(req, res) {
         let usuario = new UsuarioModel();
-        let listaUsuarios = await usuario.listar()
-
-        res.render("usuarios/listagem", { lista: listaUsuarios });
+        let lista = await usuario.listar2();
+        console.log(lista)
+        res.render("usuarios/listagem", { lista: lista });
     }
 
     async cadastroView(req, res) {
