@@ -48,7 +48,8 @@ class UsuarioModel {
         return await repo.listar();
     }
 
-        async listar2() {
+    // lista usando as rows cruas do repo
+    async listar2() {
         const repo = new UsuarioRepository();
         let lista = [];
         let rows =  await repo.listar2();
@@ -65,26 +66,31 @@ class UsuarioModel {
         return await repo.excluir(id);
     }
 
+    // valida dados basicos do usuario
     validar() {
+        let perfilIdVal = (this.#perfilId && this.#perfilId.perfilId) ? this.#perfilId.perfilId : this.#perfilId;
         return this.#usuarioNome != "" &&
             this.#usuarioEmail != "" &&
             this.#usuarioSenha != "" &&
-            this.#perfilId != 0;
+            perfilIdVal != null && perfilIdVal != 0;
     }
+    // mapeia row do banco para objeto
     static toMap(row) {
-        return new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new PerfilModel(row["per_id"]));
+        return new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new PerfilModel(row["per_id"], row["per_nome"]));
     }
+    // prepara objeto simples para json
     toJSON(){
-        return {
-        usuarioId: this.#usuarioId,
-        usuarioNome: this.#usuarioNome,
-        usuarioEmail: this.#usuarioEmail,
-        usuarioSenha: this.#usuarioSenha,
-        usuarioAtivo: this.#usuarioAtivo,
-        perfilId: {
-            perfilId: this.#perfilId.perfilId,
-            perfilDescricao: this.#perfilId.perfilDescricao
+        let perfil = null;
+        if (this.#perfilId) {
+            perfil = (this.#perfilId.perfilId) ? { perfilId: this.#perfilId.perfilId, perfilDescricao: this.#perfilId.perfilDescricao } : this.#perfilId;
         }
+        return {
+            usuarioId: this.#usuarioId,
+            usuarioNome: this.#usuarioNome,
+            usuarioEmail: this.#usuarioEmail,
+            usuarioSenha: this.#usuarioSenha,
+            usuarioAtivo: this.#usuarioAtivo,
+            perfilId: perfil
         }
     }
 

@@ -4,7 +4,7 @@ const UsuarioModel = require("../models/usuarioModel");
 class UsuarioController {
 
     static #instance;
-    #perfilRepo;
+    
 
     static getInstance() {
         if (!UsuarioController.#instance) {
@@ -21,19 +21,22 @@ class UsuarioController {
 
     //finalizar aqui as funçoes
     async listagemView(req, res) {
+        // lista usuarios para a tela
         let usuario = new UsuarioModel();
-        let lista = await usuario.listar2();
+        let lista = await usuario.listar();
         console.log(lista)
         res.render("usuarios/listagem", { lista: lista });
     }
 
     async cadastroView(req, res) {
-        let listaPerfil = await this.#perfilRepo.listar();
+        // carrega perfis para o cadastro
+        let listaPerfil = await this.perfilRepo.listar();
         res.render("usuarios/cadastro", { listaPerfil });
     }
 
     async cadastrar(req, res) {
 
+        // monta usuario com dados do form
         let usuario = new UsuarioModel(
             0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, req.body.perfil
         );
@@ -58,6 +61,7 @@ class UsuarioController {
     async alterarView(req, res) {
         console.log(req.params);
 
+        // carrega usuario e perfis para editar
         let usuario = new UsuarioModel();
         let entidade = await usuario.obter(req.params.id);
         let listaPerfil = await this.perfilRepo.listar();
@@ -68,6 +72,7 @@ class UsuarioController {
     async excluir(req, res) {
         if (req.body.id) {
 
+            // exclui usuario pelo id
             let usuario = new UsuarioModel();
             let result = await usuario.excluir(req.body.id);
 
@@ -85,6 +90,7 @@ class UsuarioController {
 
     async alterar(req, res) {
 
+        // monta usuario com dados do form
         let usuario = new UsuarioModel(
             req.body.id, req.body.nome, req.body.email, req.body.senha,
             req.body.ativo, req.body.perfil);
