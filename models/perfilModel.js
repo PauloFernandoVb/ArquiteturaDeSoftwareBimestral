@@ -2,17 +2,17 @@ const PerfilRepository = require("../Repository/perfilRepository");
 
 class PerfilModel {
 
-    #perfilId;
-    #perfilDescricao;
+    #id;
+    #descricao;
 
-    get perfilId() { return this.#perfilId }
-    set perfilId(perfilId) { this.#perfilId = perfilId }
-    get perfilDescricao() { return this.#perfilDescricao }
-    set perfilDescricao(perfilDescricao) { this.#perfilDescricao = perfilDescricao }
+    get id() { return this.#id }
+    set id(id) { this.#id = id }
+    get descricao() { return this.#descricao }
+    set descricao(descricao) { this.#descricao = descricao }
 
-    constructor(perfilId, perfilDescricao) {
-        this.#perfilId = perfilId;
-        this.#perfilDescricao = perfilDescricao;
+    constructor(id, descricao) {
+        this.#id = id;
+        this.#descricao = descricao;
     }
 
     // mapeia row do banco para objeto
@@ -28,8 +28,8 @@ class PerfilModel {
     // prepara objeto simples para json
     toJSON(){
         return {
-            perfilId: this.#perfilId,
-            perfilDescricao: this.#perfilDescricao
+            id: this.#id,
+            descricao: this.#descricao
         }
     }
 }

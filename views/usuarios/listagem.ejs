@@ -20,7 +20,7 @@
                         <td><%= u.usuarioId %></td>
                         <td><%= u.usuarioEmail %></td>
                         <td><%= u.usuarioNome %></td>
-                        <td><%= (u.perfilId && u.perfilId.perfilDescricao) ? u.perfilId.perfilDescricao : u.perfilId %></td>
+                        <td><%= (u.perfil && u.perfil.descricao) ? u.perfil.descricao : u.perfil.id %></td>
                         <td><%= u.usuarioAtivo %></td>
                         <td>
                             <a href="/usuarios/alterar/<%= u.usuarioId %>" class="btn btn-primary"><i class="fas fa-pen"></i></a>

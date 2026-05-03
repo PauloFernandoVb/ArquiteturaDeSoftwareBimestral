@@ -8,30 +8,30 @@ class UsuarioModel {
     #usuarioEmail;
     #usuarioSenha;
     #usuarioAtivo;
-    #perfilId;
+    #perfil;
 
 
-    get id() { return this.#usuarioId; }
-    set id(usuarioId) { this.#usuarioId = usuarioId }
-    get nome() { return this.#usuarioNome; }
-    set nome(usuarioNome) { this.#usuarioNome = usuarioNome; }
-    get email() { return this.#usuarioEmail; }
-    set email(usuarioEmail) { this.#usuarioEmail = usuarioEmail; }
-    get senha() { return this.#usuarioSenha; }
-    set senha(usuarioSenha) { this.#usuarioSenha = usuarioSenha; }
-    get perfilId() { return this.#perfilId; }
-    set perfilId(perfilId) { this.#perfilId = perfilId; }
-    get ativo() { return this.#usuarioAtivo; }
-    set ativo(usuarioAtivo) { this.#usuarioAtivo = usuarioAtivo; }
+    get usuarioId() { return this.#usuarioId; }
+    set usuarioId(usuarioId) { this.#usuarioId = usuarioId }
+    get usuarioNome() { return this.#usuarioNome; }
+    set usuarioNome(usuarioNome) { this.#usuarioNome = usuarioNome; }
+    get usuarioEmail() { return this.#usuarioEmail; }
+    set usuarioEmail(usuarioEmail) { this.#usuarioEmail = usuarioEmail; }
+    get usuarioSenha() { return this.#usuarioSenha; }
+    set usuarioSenha(usuarioSenha) { this.#usuarioSenha = usuarioSenha; }
+    get perfil() { return this.#perfil; }
+    set perfil(perfil) { this.#perfil = perfil; }
+    get usuarioAtivo() { return this.#usuarioAtivo; }
+    set usuarioAtivo(usuarioAtivo) { this.#usuarioAtivo = usuarioAtivo; }
 
     //implementar construtor
-    constructor(usuarioId, usuarioNome, usuarioEmail, usuarioSenha, usuarioAtivo, perfilId) {
+    constructor(usuarioId, usuarioNome, usuarioEmail, usuarioSenha, usuarioAtivo, perfil) {
         this.#usuarioId = usuarioId;
         this.#usuarioNome = usuarioNome;
         this.#usuarioEmail = usuarioEmail;
         this.#usuarioSenha = usuarioSenha;
         this.#usuarioAtivo = usuarioAtivo;
-        this.#perfilId = perfilId;
+        this.#perfil = perfil;
     }
     async cadastrar() {
         const repo = new UsuarioRepository();
@@ -40,19 +40,26 @@ class UsuarioModel {
 
     async obter(id) {
         const repo = new UsuarioRepository();
-        return await repo.obter(id);
+        let rows = await repo.obter(id);
+
+        if(rows.length>0)
+            return UsuarioModel.toMap(rows[0]);
     }
 
-    async listar() {
+    async obterPorEmailSenha(email, senha) {
         const repo = new UsuarioRepository();
-        return await repo.listar();
+        let rows = await repo.obterPorEmailSenha(email, senha);
+        
+        if(rows.length>0)
+            return UsuarioModel.toMap(rows[0])
+        return null
     }
 
     // lista usando as rows cruas do repo
-    async listar2() {
+    async listar() {
         const repo = new UsuarioRepository();
         let lista = [];
-        let rows =  await repo.listar2();
+        let rows =  await repo.listar();
        
         for (let row of rows) {
             //console.log(UsuarioModel)
@@ -68,11 +75,11 @@ class UsuarioModel {
 
     // valida dados basicos do usuario
     validar() {
-        let perfilIdVal = (this.#perfilId && this.#perfilId.perfilId) ? this.#perfilId.perfilId : this.#perfilId;
+        let perfilVal = (this.#perfil && this.#perfil.perfil) ? this.#perfil.perfil : this.#perfil;
         return this.#usuarioNome != "" &&
             this.#usuarioEmail != "" &&
             this.#usuarioSenha != "" &&
-            perfilIdVal != null && perfilIdVal != 0;
+            perfilVal != null && perfilVal != 0;
     }
     // mapeia row do banco para objeto
     static toMap(row) {
@@ -80,17 +87,13 @@ class UsuarioModel {
     }
     // prepara objeto simples para json
     toJSON(){
-        let perfil = null;
-        if (this.#perfilId) {
-            perfil = (this.#perfilId.perfilId) ? { perfilId: this.#perfilId.perfilId, perfilDescricao: this.#perfilId.perfilDescricao } : this.#perfilId;
-        }
         return {
             usuarioId: this.#usuarioId,
             usuarioNome: this.#usuarioNome,
             usuarioEmail: this.#usuarioEmail,
             usuarioSenha: this.#usuarioSenha,
             usuarioAtivo: this.#usuarioAtivo,
-            perfilId: perfil
+            perfil: this.#perfil
         }
     }
 

@@ -16,7 +16,7 @@ class UsuarioController {
 
 
     constructor() {
-        this.perfilRepo = new PerfilRepository();
+        //this.perfilRepo = new PerfilRepository();
     }
 
     //finalizar aqui as funçoes
@@ -31,6 +31,7 @@ class UsuarioController {
     async cadastroView(req, res) {
         // carrega perfis para o cadastro
         let listaPerfil = await this.perfilRepo.listar();
+
         res.render("usuarios/cadastro", { listaPerfil });
     }
 

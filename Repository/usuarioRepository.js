@@ -1,6 +1,4 @@
-
 const PerfilModel = require("../models/perfilModel");
-const UsuarioModel = require("../models/usuarioModel");
 const Repository = require("./Repository");
 
 class UsuarioRepository extends Repository {
@@ -17,31 +15,13 @@ class UsuarioRepository extends Repository {
 
         let rows = await this.banco.ExecutaComando(sql, valores);
 
-        if (rows.length > 0) {            
-            return UsuarioModel.toMap(rows[0]);
-        }
-
-        return null;
-    }
-
-    async listar() {
-
-        let sql = "select * from tb_usuario";
-
-        let rows = await this.banco.ExecutaComando(sql);
-        let lista = [];
-
-        for (let row of rows) {
-            lista.push(UsuarioModel.toMap(row));
-            //lista.push(new UsuarioModel(row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new //PerfilModel(row["per_id"])));
-        }
-        return lista;
+        return rows;
     }
 
     // retorna rows cruas
-    async listar2() {
+    async listar() {
 
-        let sql = "select * from tb_usuario";
+        let sql = "select * from tb_usuario u inner join tb_perfil p on p.per_id = u.per_id";
 
         let rows = await this.banco.ExecutaComando(sql);
 
@@ -52,10 +32,7 @@ class UsuarioRepository extends Repository {
         if (usuario.id == 0) {
             let sql = "insert into tb_usuario (usu_email, usu_nome, usu_senha, usu_ativo, per_id) values (?,?,?,?,?)";
 
-            // normaliza perfilId (objeto ou id)
-            let perfilIdValue = (usuario.perfilId && usuario.perfilId.perfilId) ? usuario.perfilId.perfilId : usuario.perfilId;
-
-            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, perfilIdValue];
+            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfil];
 
             let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
 
@@ -64,10 +41,7 @@ class UsuarioRepository extends Repository {
         else {
             let sql = "update tb_usuario set usu_email = ?, usu_nome = ?, usu_senha = ?, usu_ativo = ?, per_id = ? where usu_id = ?";
 
-            // normaliza perfilId (objeto ou id)
-            let perfilIdValue = (usuario.perfilId && usuario.perfilId.perfilId) ? usuario.perfilId.perfilId : usuario.perfilId;
-
-            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, perfilIdValue, usuario.id];
+            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfil, usuario.id];
 
             let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
             return result;
@@ -81,10 +55,11 @@ class UsuarioRepository extends Repository {
 
         let rows = await this.banco.ExecutaComando(sql, valores);
 
-        if (rows.length > 0) {
-            return UsuarioModel.toMap(rows[0]);
-        }
-        return null;
+        return rows;
+        // if (rows.length > 0) {
+        //     return UsuarioModel.toMap(rows[0]);
+        // }
+        // return null;
     }
 
     async excluir(id) {
