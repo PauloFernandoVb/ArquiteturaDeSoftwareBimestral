@@ -3,34 +3,34 @@ const PerfilModel = require("../models/perfilModel")
 
 class UsuarioModel {
 
-    #usuarioId;
-    #usuarioNome;
-    #usuarioEmail;
-    #usuarioSenha;
-    #usuarioAtivo;
+    #id;
+    #nome;
+    #email;
+    #senha;
+    #ativo;
     #perfil;
 
 
-    get usuarioId() { return this.#usuarioId; }
-    set usuarioId(usuarioId) { this.#usuarioId = usuarioId }
-    get usuarioNome() { return this.#usuarioNome; }
-    set usuarioNome(usuarioNome) { this.#usuarioNome = usuarioNome; }
-    get usuarioEmail() { return this.#usuarioEmail; }
-    set usuarioEmail(usuarioEmail) { this.#usuarioEmail = usuarioEmail; }
-    get usuarioSenha() { return this.#usuarioSenha; }
-    set usuarioSenha(usuarioSenha) { this.#usuarioSenha = usuarioSenha; }
+    get id() { return this.#id; }
+    set id(id) { this.#id = id }
+    get nome() { return this.#nome; }
+    set nome(nome) { this.#nome = nome; }
+    get email() { return this.#email; }
+    set email(email) { this.#email = email; }
+    get senha() { return this.#senha; }
+    set senha(senha) { this.#senha = senha; }
     get perfil() { return this.#perfil; }
     set perfil(perfil) { this.#perfil = perfil; }
-    get usuarioAtivo() { return this.#usuarioAtivo; }
-    set usuarioAtivo(usuarioAtivo) { this.#usuarioAtivo = usuarioAtivo; }
+    get ativo() { return this.#ativo; }
+    set ativo(ativo) { this.#ativo = ativo; }
 
     //implementar construtor
-    constructor(usuarioId, usuarioNome, usuarioEmail, usuarioSenha, usuarioAtivo, perfil) {
-        this.#usuarioId = usuarioId;
-        this.#usuarioNome = usuarioNome;
-        this.#usuarioEmail = usuarioEmail;
-        this.#usuarioSenha = usuarioSenha;
-        this.#usuarioAtivo = usuarioAtivo;
+    constructor(id, nome, email, senha, ativo, perfil) {
+        this.#id = id;
+        this.#nome = nome;
+        this.#email = email;
+        this.#senha = senha;
+        this.#ativo = ativo;
         this.#perfil = perfil;
     }
     async cadastrar() {
@@ -54,6 +54,11 @@ class UsuarioModel {
             return UsuarioModel.toMap(rows[0])
         return null
     }
+    //retorna false se já tiver um email igual cadastrado
+    async validarEmail(){
+        const repo = new UsuarioRepository();
+        return await repo.validarEmail(this.#email);
+    }
 
     // lista usando as rows cruas do repo
     async listar() {
@@ -75,11 +80,11 @@ class UsuarioModel {
 
     // valida dados basicos do usuario
     validar() {
-        let perfilVal = (this.#perfil && this.#perfil.perfil) ? this.#perfil.perfil : this.#perfil;
-        return this.#usuarioNome != "" &&
-            this.#usuarioEmail != "" &&
-            this.#usuarioSenha != "" &&
-            perfilVal != null && perfilVal != 0;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let perfilVal = (this.#perfil && this.#perfil.id) ? this.#perfil : null;
+        if(this.#nome != "" && this.#email != "" && regex.test(this.#email) && this.#senha != "" && perfilVal != null && perfilVal != 0)
+            return true;
+        return false;
     }
     // mapeia row do banco para objeto
     static toMap(row) {
@@ -88,11 +93,11 @@ class UsuarioModel {
     // prepara objeto simples para json
     toJSON(){
         return {
-            usuarioId: this.#usuarioId,
-            usuarioNome: this.#usuarioNome,
-            usuarioEmail: this.#usuarioEmail,
-            usuarioSenha: this.#usuarioSenha,
-            usuarioAtivo: this.#usuarioAtivo,
+            id: this.#id,
+            nome: this.#nome,
+            email: this.#email,
+            senha: this.#senha,
+            ativo: this.#ativo,
             perfil: this.#perfil
         }
     }

@@ -17,14 +17,14 @@
             <tbody>
                 <% lista.forEach(u => { %>
                     <tr>
-                        <td><%= u.usuarioId %></td>
-                        <td><%= u.usuarioEmail %></td>
-                        <td><%= u.usuarioNome %></td>
-                        <td><%= (u.perfil && u.perfil.descricao) ? u.perfil.descricao : u.perfil.id %></td>
-                        <td><%= u.usuarioAtivo %></td>
+                        <td><%= u.id %></td>
+                        <td><%= u.email %></td>
+                        <td><%= u.nome %></td>
+                        <td><%= u.perfil.descricao%></td>
+                        <td><%= u.ativo %></td>
                         <td>
-                            <a href="/usuarios/alterar/<%= u.usuarioId %>" class="btn btn-primary"><i class="fas fa-pen"></i></a>
-                            <button data-codigoexclusao="<%= u.usuarioId %>" class="btn btn-danger btnExclusao"><i class="fas fa-trash"></i></button>
+                            <a href="/usuarios/alterar/<%= u.id %>" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                            <button data-codigoexclusao="<%= u.id %>" class="btn btn-danger btnExclusao"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                 <% }) %>

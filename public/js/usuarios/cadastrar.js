@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", function() {
         if(nome == "") {
             listaErros.push("usuarioNome");
         }
-        if(email == "") {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(email == "" || !regex.test(email)) {
             listaErros.push("usuarioEmail");
         }
         if(senha == "") {

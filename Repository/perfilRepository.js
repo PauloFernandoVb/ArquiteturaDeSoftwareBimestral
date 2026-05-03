@@ -13,14 +13,7 @@ class PerfilRepository {
 
         let sql = "select * from tb_perfil";
         let rows = await this.banco.ExecutaComando(sql);
-
-        let lista = [];
-
-        for (let row of rows) {
-            lista.push(PerfilModel.toMap(row));
-        }
-
-        return lista;
+        return rows;
     }
 }
 

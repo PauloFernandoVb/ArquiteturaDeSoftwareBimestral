@@ -14,7 +14,7 @@ class LoginController {
             const repo = new UsuarioRepository();
             let usuario = await repo.obterPorEmailSenha(req.body.email, req.body.password);
             if (usuario != null) {
-                res.cookie("usuarioLogado", usuario.usuarioId);
+                res.cookie("usuarioLogado", usuario.id);
                 return res.redirect("/");
             }
             else {

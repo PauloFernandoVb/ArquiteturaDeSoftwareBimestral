@@ -17,6 +17,16 @@ class UsuarioRepository extends Repository {
 
         return rows;
     }
+    async validarEmail(email) {
+        let sql = "select * from tb_usuario where usu_email = ?";
+
+        let valores = [email];
+
+        let rows = await this.banco.ExecutaComando(sql, valores);
+        if(rows.length>0)
+            return false;
+        return true;
+    }
 
     // retorna rows cruas
     async listar() {
@@ -32,7 +42,7 @@ class UsuarioRepository extends Repository {
         if (usuario.id == 0) {
             let sql = "insert into tb_usuario (usu_email, usu_nome, usu_senha, usu_ativo, per_id) values (?,?,?,?,?)";
 
-            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfil];
+            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfil.id];
 
             let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
 
@@ -41,7 +51,7 @@ class UsuarioRepository extends Repository {
         else {
             let sql = "update tb_usuario set usu_email = ?, usu_nome = ?, usu_senha = ?, usu_ativo = ?, per_id = ? where usu_id = ?";
 
-            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfil, usuario.id];
+            let valores = [usuario.email, usuario.nome, usuario.senha, usuario.ativo, usuario.perfil.id, usuario.id];
 
             let result = await this.banco.ExecutaComandoNonQuery(sql, valores);
             return result;

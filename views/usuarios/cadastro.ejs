@@ -32,7 +32,7 @@
                     <select class="form-control" id="usuarioPerfil" name="usuarioPerfil">
                         <option selected value="0">Selecione...</option>
                         <% for(let i = 0; i<listaPerfil.length; i++) { %>
-                            <option value="<%= listaPerfil[i].perfilId %>"><%= listaPerfil[i].perfilDescricao %></option>
+                            <option value="<%= listaPerfil[i].id %>"><%= listaPerfil[i].descricao %></option>
                         <% } %>
                     </select>
                 </div>

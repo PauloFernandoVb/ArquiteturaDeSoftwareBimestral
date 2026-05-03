@@ -22,7 +22,13 @@ class PerfilModel {
     // lista perfis do banco
     async listar() {
         const repo = new PerfilRepository();
-        return await repo.listar();
+        let lista = [];
+        let rows = await repo.listar();
+        
+        for(let row of rows){
+            lista.push(PerfilModel.toMap(row))
+        }
+        return lista
     }
     
     // prepara objeto simples para json

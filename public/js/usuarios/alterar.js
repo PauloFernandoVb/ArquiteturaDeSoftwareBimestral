@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 email: email,
                 senha: senha,
                 ativo: ativo,
-                perfil: perfil,
+                perfilId: perfil,
             }
 
             fetch("/usuarios/alterar", {

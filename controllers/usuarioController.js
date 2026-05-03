@@ -1,4 +1,4 @@
-const PerfilRepository = require("../Repository/perfilRepository")
+const PerfilModel = require("../models/perfilModel");
 const UsuarioModel = require("../models/usuarioModel");
 
 class UsuarioController {
@@ -16,7 +16,6 @@ class UsuarioController {
 
 
     constructor() {
-        //this.perfilRepo = new PerfilRepository();
     }
 
     //finalizar aqui as funçoes
@@ -24,48 +23,51 @@ class UsuarioController {
         // lista usuarios para a tela
         let usuario = new UsuarioModel();
         let lista = await usuario.listar();
-        console.log(lista)
-        res.render("usuarios/listagem", { lista: lista });
+        res.render("usuarios/listagem", { lista });
     }
 
     async cadastroView(req, res) {
         // carrega perfis para o cadastro
-        let listaPerfil = await this.perfilRepo.listar();
+        let perfil = new PerfilModel();
+        let listaPerfil = await perfil.listar();
 
         res.render("usuarios/cadastro", { listaPerfil });
     }
 
     async cadastrar(req, res) {
-
+        let ok = true;
+        let msg;
         // monta usuario com dados do form
         let usuario = new UsuarioModel(
-            0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, req.body.perfil
+            0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, new PerfilModel(req.body.perfil)
         );
-
-        if (usuario.validar()) {
-            let result = await usuario.cadastrar();
-
-            if (result) {
-                res.send({ ok: true, msg: "Cadastrado com sucesso!" })
-            } else {
-                res.send({ ok: false, msg: "Erro ao cadastrar!" });
-            }
-        } else {
-            res.send({
-                ok: false,
-                msg: "Parâmetros preenchidos incorretamente!"
-            });
-
+        
+        if (!usuario.validar()) {
+            ok = false;
+            msg = "Parâmetros preenchidos incorretamente!";
         }
-
+        if(ok && !await usuario.validarEmail()){
+            ok = false
+            msg= "Email já cadastrado!";
+        }
+        if(ok && !await usuario.cadastrar()){
+            ok = false;
+            msg= 'Erro ao cadastrar!';
+        }
+        if(ok)
+            msg= 'Cadastrado com Sucesso!';
+        res.send({ok,msg})
     }
+    
     async alterarView(req, res) {
         console.log(req.params);
 
         // carrega usuario e perfis para editar
         let usuario = new UsuarioModel();
         let entidade = await usuario.obter(req.params.id);
-        let listaPerfil = await this.perfilRepo.listar();
+
+        let perfil = new PerfilModel();
+        let listaPerfil = await perfil.listar();
 
         res.render('usuarios/alterar', { usuario: entidade, listaPerfil });
     }
@@ -94,7 +96,7 @@ class UsuarioController {
         // monta usuario com dados do form
         let usuario = new UsuarioModel(
             req.body.id, req.body.nome, req.body.email, req.body.senha,
-            req.body.ativo, req.body.perfil);
+            req.body.ativo, new PerfilModel(req.body.perfilId));
 
         if (usuario.validar()) {
 
