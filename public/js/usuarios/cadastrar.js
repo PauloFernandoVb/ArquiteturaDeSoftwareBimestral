@@ -7,6 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("usuarioEmail").style["border-color"] = "#ced4da";
         document.getElementById("usuarioSenha").style["border-color"] = "#ced4da";
         document.getElementById("usuarioPerfil").style["border-color"] = "#ced4da";
+        // Limpar mensagens de erro
+        document.getElementById("erroNome").textContent = "";
+        document.getElementById("erroEmail").textContent = "";
+        document.getElementById("erroSenha").textContent = "";
+        document.getElementById("erroPerfil").textContent = "";
     }
 
     function cadastrar() {
@@ -18,18 +23,23 @@ document.addEventListener("DOMContentLoaded", function() {
         let ativo = document.querySelector("#usuarioAtivo").checked;
 
         let listaErros = [];
-        if(nome == "") {
+        let mensagensErro = [];
+        if(nome == "" || nome.length <= 6 || /\d/.test(nome)) {
             listaErros.push("usuarioNome");
+            mensagensErro.push({campo: "erroNome", msg: "O nome deve ter mais de 6 letras e não conter números."});
         }
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(email == "" || !regex.test(email)) {
             listaErros.push("usuarioEmail");
+            mensagensErro.push({campo: "erroEmail", msg: "O email deve ser válido (ex: usuario@dominio.com)."});
         }
-        if(senha == "") {
+        if(senha == "" || senha.length <= 6) {
             listaErros.push("usuarioSenha");
+            mensagensErro.push({campo: "erroSenha", msg: "A senha deve ter mais de 6 caracteres."});
         }
         if(perfil == 0) {
             listaErros.push("usuarioPerfil");
+            mensagensErro.push({campo: "erroPerfil", msg: "Selecione um perfil válido."});
         }
 
         if(listaErros.length == 0) {
@@ -68,7 +78,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 let campos = document.getElementById(listaErros[i]);
                 campos.style["border-color"] = "red";
             }
-            alert("Preencha corretamente os campos indicados!");
+            // Mostrar mensagens específicas nos spans
+            for(let erro of mensagensErro) {
+                document.getElementById(erro.campo).textContent = erro.msg;
+            }
         }
     }
 
