@@ -31,15 +31,7 @@ app.use(cookieParser());
 //definindo as rotas que o nosso sistema vai reconhecer através da url do navegador
 app.use("/login", loginRoute);
 app.use('/', homeRoute);
-// app.use('/produto', produtoRoute);
-// app.use("/pedido", pedidoRoute);
-// let auth = new AuthMiddleware();
 
-// app.use(auth.verificarUsuarioLogado);
-
-
-// app.use("/marcas", marcaRoute);
-// app.use("/categorias", categoriaRoute);
 app.use("/usuarios", usuarioRoute);
 app.use("/perfis", perfilRoute);
 

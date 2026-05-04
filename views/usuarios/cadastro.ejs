@@ -12,18 +12,21 @@
                 <div class="form-group">
                     <label for="usuarioEmail" class="form-label">Email</label>
                     <input type="text" class="form-control" id="usuarioEmail" name="usuarioEmail">
+                    <span id="erroEmail" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class="form-group">
                     <label for="usuarioSenha" class="form-label">Senha</label>
                     <input type="password" class="form-control" id="usuarioSenha" name="usuarioSenha">
+                    <span id="erroSenha" class="text-danger"></span>
                 </div>
             </div>
             <div>
                 <div class="form-group">
                     <label for="usuarioNome" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="usuarioNome" name="usuarioNome">
+                    <span id="erroNome" class="text-danger"></span>
                 </div>
             </div>
             <div>
@@ -35,6 +38,7 @@
                             <option value="<%= listaPerfil[i].id %>"><%= listaPerfil[i].descricao %></option>
                         <% } %>
                     </select>
+                    <span id="erroPerfil" class="text-danger"></span>
                 </div>
             </div>
             <div>
