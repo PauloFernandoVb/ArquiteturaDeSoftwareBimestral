@@ -28,7 +28,6 @@ class UsuarioRepository extends Repository {
         return true;
     }
 
-    // retorna rows cruas
     async listar() {
 
         let sql = "select * from tb_usuario u inner join tb_perfil p on p.per_id = u.per_id";
@@ -37,7 +36,6 @@ class UsuarioRepository extends Repository {
 
         return rows;
     }
-
     async cadastrar(usuario) {
         if (usuario.id == 0) {
             let sql = "insert into tb_usuario (usu_email, usu_nome, usu_senha, usu_ativo, per_id) values (?,?,?,?,?)";

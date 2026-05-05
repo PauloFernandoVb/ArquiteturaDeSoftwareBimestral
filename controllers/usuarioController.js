@@ -34,6 +34,12 @@ class UsuarioController {
         res.render("usuarios/cadastro", { listaPerfil });
     }
 
+    // validacao simples de email
+    emailValido(email) {
+        let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
     async cadastrar(req, res) {
         let ok = true;
         let msg;
@@ -42,7 +48,11 @@ class UsuarioController {
             0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, new PerfilModel(req.body.perfil)
         );
         
-        if (!usuario.validar()) {
+        if (!this.emailValido(req.body.email)) {
+            ok = false;
+            msg = "Email inválido";
+        }
+        if (ok && !usuario.validar()) {
             ok = false;
             msg = "Parâmetros preenchidos incorretamente!";
         }
@@ -83,11 +93,11 @@ class UsuarioController {
                 res.send({ ok: true, msg: "Excluido com sucesso" });
             }
             else {
-                res.send({ ok: false, msg: "Erro ao excluir" });
+                res.status(500).send({ ok: false, msg: "Erro ao excluir" });
             }
 
         } else {
-            res.send({ ok: false, msg: "ID não enviado" });
+            res.status(400).send({ ok: false, msg: "ID não enviado" });
         }
     }
 
@@ -98,6 +108,10 @@ class UsuarioController {
             req.body.id, req.body.nome, req.body.email, req.body.senha,
             req.body.ativo, new PerfilModel(req.body.perfilId));
 
+        if (!this.emailValido(req.body.email)) {
+            return res.status(400).send({ ok: false, msg: "Email inválido" });
+        }
+
         if (usuario.validar()) {
 
             let result = await usuario.cadastrar();
@@ -106,10 +120,10 @@ class UsuarioController {
                 res.send({ ok: true, msg: "Alterado com sucesso" });
             }
             else {
-                res.send({ ok: false, msg: "Erro ao alterar" });
+                res.status(500).send({ ok: false, msg: "Erro ao alterar" });
             }
         } else {
-            res.send({ ok: false, msg: "Dados inválidos" });
+            res.status(400).send({ ok: false, msg: "Dados inválidos" });
         }
     }
 

@@ -72,7 +72,6 @@ class UsuarioModel {
         }
         return lista
     }
-
     async excluir(id) {
         const repo = new UsuarioRepository();
         return await repo.excluir(id);

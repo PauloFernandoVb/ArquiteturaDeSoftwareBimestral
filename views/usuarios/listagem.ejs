@@ -23,8 +23,14 @@
                         <td><%= u.id %></td>
                         <td><%= u.email %></td>
                         <td><%= u.nome %></td>
-                        <td><%= u.perfil.descricao%></td>
-                        <td><%= u.ativo %></td>
+                        <td><%= (u.perfil && u.perfil.descricao) ? u.perfil.descricao : "Sem perfil" %></td>
+                        <td>
+                            <% if (u.ativo) { %>
+                                <span class="badge badge-success">Ativo</span>
+                            <% } else { %>
+                                <span class="badge badge-secondary">Inativo</span>
+                            <% } %>
+                        </td>
                         <td>
                             <a href="/usuarios/alterar/<%= u.id %>" class="btn btn-primary"><i class="fas fa-pen"></i></a>
                             <button data-codigoexclusao="<%= u.id %>" class="btn btn-danger btnExclusao"><i class="fas fa-trash"></i></button>
