@@ -1,5 +1,5 @@
 const PerfilModel = require("../models/perfilModel");
-
+const Banco = require("../db/database");
 class PerfilController {
 
     static #instance;
@@ -12,13 +12,19 @@ class PerfilController {
     }
 
     async listagemView(req, res) {
+        const banco = Banco.getInstance();
 
-        let perfil = new PerfilModel();
-        let lista = await perfil.listar();
+        try {
+            let perfil = new PerfilModel(banco);
+            let lista = await perfil.listar();
 
-        res.render('perfil/listagem', {
-            listaPerfil: lista
-        });
+            res.render('perfil/listagem', {
+                listaPerfil: lista
+            });
+        } catch (erro) {
+            res.status(500).send({ ok: false, msg: "Erro ao conectar ao banco de dados" });
+        }
+
     }
 }
 

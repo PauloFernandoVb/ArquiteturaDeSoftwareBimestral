@@ -14,8 +14,11 @@ class Repository {
         this.#banco = banco;
     }
 
-    constructor() {
-        this.#banco = Banco.getInstance();
+    constructor(banco) {
+        if(!banco){
+            throw new Error("Banco de dados não fornecido para o repositório");
+        }
+        this.#banco = banco;
     }
 
 }
