@@ -5,8 +5,8 @@ const PerfilModel = require("../models/perfilModel");
 
 class PerfilRepository {
 
-    constructor() {
-        this.banco = Database.getInstance();
+    constructor(banco) {
+        this.banco = banco;
     }
 
     async listar() {

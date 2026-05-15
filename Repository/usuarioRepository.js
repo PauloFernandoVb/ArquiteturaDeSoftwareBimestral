@@ -1,10 +1,9 @@
-const PerfilModel = require("../models/perfilModel");
 const Repository = require("./Repository");
 
 class UsuarioRepository extends Repository {
 
-    constructor() {
-        super();
+    constructor(banco) {
+        super(banco);
     }
 
     // busca usuario pelo email e senha
