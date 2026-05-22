@@ -27,6 +27,7 @@ class UsuarioModel {
 
     //implementar construtor
     constructor(banco, id, nome, email, senha, ativo, perfil) {
+        
         this.#banco = banco;
         this.#id = id;
         this.#nome = nome;
@@ -45,7 +46,7 @@ class UsuarioModel {
         let rows = await repo.obter(id);
 
         if (rows.length > 0)
-            return UsuarioModel.toMap(rows[0]);
+            return UsuarioModel.toMap(rows[0], this.#banco);
     }
 
     async obterPorEmailSenha(email, senha) {
@@ -53,7 +54,7 @@ class UsuarioModel {
         let rows = await repo.obterPorEmailSenha(email, senha);
 
         if (rows.length > 0)
-            return UsuarioModel.toMap(rows[0])
+            return UsuarioModel.toMap(rows[0], this.#banco)
         return null
     }
     //retorna false se já tiver um email igual cadastrado
@@ -70,7 +71,7 @@ class UsuarioModel {
 
         for (let row of rows) {
             //console.log(UsuarioModel)
-            lista.push(UsuarioModel.toMap(row));
+            lista.push(UsuarioModel.toMap(row, this.#banco));
         }
         return lista
     }
@@ -89,7 +90,7 @@ class UsuarioModel {
     }
     // mapeia row do banco para objeto
     static toMap(row, banco) {
-        return new UsuarioModel(banco, row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new PerfilModel(row["per_id"], row["per_nome"]));
+        return new UsuarioModel(banco, row["usu_id"], row["usu_nome"], row["usu_email"], row["usu_senha"], row["usu_ativo"], new PerfilModel(banco, row["per_id"], row["per_nome"]));
     }
     // prepara objeto simples para json
     toJSON() {

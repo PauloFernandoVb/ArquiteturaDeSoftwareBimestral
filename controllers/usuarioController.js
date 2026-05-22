@@ -57,7 +57,7 @@ class UsuarioController {
         try {
             let usuario = new UsuarioModel(
                 banco,
-                0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, new PerfilModel(req.body.perfil)
+                0, req.body.nome, req.body.email, req.body.senha, req.body.ativo, new PerfilModel(banco, req.body.perfil)
             );
 
             if (!this.emailValido(req.body.email)) {
@@ -93,7 +93,7 @@ class UsuarioController {
             let usuario = new UsuarioModel(banco);
             let entidade = await usuario.obter(req.params.id);
 
-            let perfil = new PerfilModel();
+            let perfil = new PerfilModel(banco);
             let listaPerfil = await perfil.listar();
 
             res.render('usuarios/alterar', { usuario: entidade, listaPerfil });
@@ -132,7 +132,7 @@ class UsuarioController {
         try {
             let usuario = new UsuarioModel(banco,
                 req.body.id, req.body.nome, req.body.email, req.body.senha,
-                req.body.ativo, new PerfilModel(req.body.perfilId));
+                req.body.ativo, new PerfilModel(banco, req.body.perfilId));
 
             if (!this.emailValido(req.body.email)) {
                 return res.status(400).send({ ok: false, msg: "Email inválido" });
