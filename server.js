@@ -10,7 +10,6 @@ const usuarioRoute = require("./routes/usuarioRoute");
 const perfilRoute = require('./routes/perfilRoute');
 // const pedidoRoute = require("./routes/pedidosRoute");
 const cookieParser = require("cookie-parser");
-
 // const AuthMiddleware = require('./middlewares/authMiddleware');
 const app = express();
 //configurando a nossa pasta public como o nosso repositorio de arquivos estáticos (css, js, imagens)
@@ -31,7 +30,6 @@ app.use(cookieParser());
 //definindo as rotas que o nosso sistema vai reconhecer através da url do navegador
 app.use("/login", loginRoute);
 app.use('/', homeRoute);
-
 app.use("/usuarios", usuarioRoute);
 app.use("/perfis", perfilRoute);
 

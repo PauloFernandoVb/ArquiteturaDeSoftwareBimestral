@@ -1,7 +1,9 @@
 const PerfilRepository = require("../Repository/perfilRepository");
 
 class PerfilModel {
+    
     #banco;
+
     #id;
     #descricao;
 
@@ -15,6 +17,7 @@ class PerfilModel {
     constructor(banco, id, descricao) {
         this.#id = id;
         this.#descricao = descricao;
+
         this.#banco = banco;
     }
 
